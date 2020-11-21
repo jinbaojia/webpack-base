@@ -304,6 +304,20 @@
           },
         ],
       },
+       {
+                test: /\.(eot|woff2?|woff|ttf|svg)$/,
+                use: [
+                    {
+                        loader: "url-loader",
+                        options: {
+                            name: "[name].[hash:8].[ext]",
+                            limit: 5000, // fonts file size <= 5KB, use 'base64'; else, output svg file
+                            publicPath: "fonts/",
+                            outputPath: "fonts/"
+                        }
+                    }
+                ]
+            }
     ```
 * 运行指令：webpack
 
@@ -582,6 +596,27 @@ module 映射第三方模块
       name:'runtime'
     }
   },
+
+### css split
+npm i -D purifycss-webpack purify-css    没使用的css样式不打包
+const PurifyCSSPlugin = require('purifycss-webpack');
+const glob = require('glob');
+new PurifyCSSPlugin({
+paths:glob.sync(path.join(__dirname,'../public/*.html'))
+}),
+
+但页面应用者么就行，多页面要用数组配置path
+
+
+
+### 压缩图片
+cnpm install image-webpack-loader --save-dev
+将不被base64处理的图片进行压缩处理
+{
+loader: "image-webpack-loader",
+options: { disable: false, }
+}
+
 
   ### 预加载 
   preload 对同步模块使用
